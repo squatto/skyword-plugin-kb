@@ -14,9 +14,9 @@ License: GPL2
 if ( !defined('SKYWORD_PATH') )
 	define( 'SKYWORD_PATH', plugin_dir_path( __FILE__ ) );
 if ( !defined('SKYWORD_VERSION') )
-	define( 'SKYWORD_VERSION', "2.2.3" );
+	define( 'SKYWORD_VERSION', "2.2.4" );
 if ( !defined('SKYWORD_VN') )
-	define( 'SKYWORD_VN', "2.23" ); //This CANNOT have two decimal places.
+	define( 'SKYWORD_VN', "2.24" ); //This CANNOT have two decimal places.
 //.1.4 is NOT valid.
 
 register_activation_hook(__FILE__, 'get_skyword_defaults');
