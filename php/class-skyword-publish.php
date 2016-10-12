@@ -170,12 +170,17 @@ class Skyword_Publish {
 			do_action( 'xmlrpc_call', 'metaWeblog.getCategories' );
 
 			$categories_struct = array();
+            $cats = get_categories( array(
+                'get'      => 'all',
+                'taxonomy' => array('category', 'ht_kb_category'),
+            ) );
 
-			if ( $cats = get_categories( array( 'get' => 'all' ) ) ) {
+			if ( $cats ) {
 				foreach ( $cats as $cat ) {
 					$struct['categoryId']   = $cat->term_id;
 					$struct['parentId']     = $cat->parent;
 					$struct['categoryName'] = $cat->name;
+					$struct['categoryIsKB'] = ($cat->taxonomy == 'ht_kb_category');
 					$categories_struct[]    = $struct;
 				}
 			}
