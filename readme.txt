@@ -20,6 +20,9 @@ Allows integration with the skyword publishing platform, extended to include kno
 
 == Changelog ==
 
+= 2.2.4 =
+* Added knowledge-base support using the Heroic Knowledge Base plugin
+
 = 2.2.3 =
 * Better uri matching for sitemaps
 

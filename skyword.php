@@ -1,10 +1,10 @@
 <?php 
 /*
-Plugin Name: Skyword
+Plugin Name: Skyword - KB
 Plugin URI: http://www.skyword.com
-Description: Integration with the Skyword content publication platform.
-Version: 2.2.3
-Author: Skyword, Inc.
+Description: Integration with the Skyword content publication platform, with knowledge-base support.
+Version: 2.2.4
+Author: Skyword, Inc., PXP
 Author URI: http://www.skyword.com
 License: GPL2
 */
