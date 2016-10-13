@@ -163,16 +163,19 @@ class Skyword_Publish {
 	/**
 	 * Returns list of categories for write.skyword.com publishing
 	 */
-	public function skyword_get_categories( $args = '' ) {
+	public function skyword_get_categories( $args = [] ) {
 		$login = $this->login( $args );
 		if ( 'success' == $login['status'] ) {
 
 			do_action( 'xmlrpc_call', 'metaWeblog.getCategories' );
 
+            $data = $args[3];
+            $taxonomy = empty($data['knowledge_base']) || ! $data['knowledge_base'] ? 'category' : 'ht_kb_category';
+
 			$categories_struct = array();
             $cats = get_categories( array(
                 'get'      => 'all',
-                'taxonomy' => array('category', 'ht_kb_category'),
+                'taxonomy' => $taxonomy,
             ) );
 
 			if ( $cats ) {
@@ -180,7 +183,6 @@ class Skyword_Publish {
 					$struct['categoryId']   = $cat->term_id;
 					$struct['parentId']     = $cat->parent;
 					$struct['categoryName'] = $cat->name;
-					$struct['categoryIsKB'] = ($cat->taxonomy == 'ht_kb_category');
 					$categories_struct[]    = $struct;
 				}
 			}
@@ -194,7 +196,7 @@ class Skyword_Publish {
 	/**
 	 * Returns list of tags for write.skyword.com publishing
 	 */
-	public function skyword_get_tags( $args = '' ) {
+	public function skyword_get_tags( $args = [] ) {
 		$login = $this->login( $args );
 		if ( 'success' == $login['status'] ) {
 			do_action( 'xmlrpc_call', 'wp.getKeywords' );
@@ -217,7 +219,7 @@ class Skyword_Publish {
 		}
 	}
 
-	public function skyword_get_taxonomies( $args = '' ) {
+	public function skyword_get_taxonomies( $args = [] ) {
 		$login = $this->login( $args );
 		if ( 'success' == $login['status'] ) {
 			$taxonomiesStruct = array();
@@ -317,7 +319,7 @@ class Skyword_Publish {
 	/**
 	 * Returns permalink for post to write.skyword.com
 	 */
-	public function skyword_get_post( $args = '' ) {
+	public function skyword_get_post( $args = [] ) {
 		$login = $this->login( $args );
 		if ( 'success' == $login['status'] ) {
 			$post_id          = (int) $args[3];
@@ -332,7 +334,7 @@ class Skyword_Publish {
 	/**
 	 * Deletes post by id
 	 */
-	public function skyword_delete_post( $args = '' ) {
+	public function skyword_delete_post( $args = [] ) {
 
 		$login = $this->login( $args );
 		if ( 'success' == $login['status'] ) {
