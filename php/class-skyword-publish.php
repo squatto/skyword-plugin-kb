@@ -94,7 +94,7 @@ class Skyword_Publish {
 	 * Returns current version of plugin to write.skyword.com.
 	 */
 	public function skyword_version( $args ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			return strval( 'Wordpress Version: ' . get_bloginfo( 'version' ) . ' Plugin Version: ' . SKYWORD_VERSION );
 		} else {
@@ -106,7 +106,7 @@ class Skyword_Publish {
 	 * Returns version number of plugin
 	 */
 	public function skyword_version_number( $args ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			return strval( SKYWORD_VN );
 		} else {
@@ -115,7 +115,7 @@ class Skyword_Publish {
 	}
 
 	public function skyword_version_info( $args ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			return array(
 				'plugin_version'    => SKYWORD_VERSION,
@@ -128,7 +128,7 @@ class Skyword_Publish {
 	 * Gets author id if they exist, otherwise creates guest author with co-author-plus plugin
 	 */
 	public function skyword_author( $args ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			$data    = $args[3];
 			$user_id = $this->check_username_exists( $data );
@@ -143,7 +143,7 @@ class Skyword_Publish {
 	 * Returns list of authors associated with site for ghost writing
 	 */
 	public function skyword_get_authors( $args ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			$authors = array();
 			foreach (
@@ -170,7 +170,7 @@ class Skyword_Publish {
 	 * Returns list of categories for write.skyword.com publishing
 	 */
 	public function skyword_get_categories( $args = [] ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 
 			do_action( 'xmlrpc_call', 'metaWeblog.getCategories' );
@@ -203,7 +203,7 @@ class Skyword_Publish {
 	 * Returns list of tags for write.skyword.com publishing
 	 */
 	public function skyword_get_tags( $args = [] ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			do_action( 'xmlrpc_call', 'wp.getKeywords' );
 
@@ -226,7 +226,7 @@ class Skyword_Publish {
 	}
 
 	public function skyword_get_taxonomies( $args = [] ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			$taxonomiesStruct = array();
 			$taxonomies       = get_taxonomies( null, "objects" );
@@ -269,7 +269,7 @@ class Skyword_Publish {
 
 
 	public function skyword_get_taxonomy_list( $args ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 
 			$taxonomies = get_taxonomies( null, "objects" );
@@ -295,7 +295,7 @@ class Skyword_Publish {
 	}
 
 	public function skyword_get_taxonomy_terms_chunk( $args ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			global $wpdb;
 
@@ -326,7 +326,7 @@ class Skyword_Publish {
 	 * Returns permalink for post to write.skyword.com
 	 */
 	public function skyword_get_post( $args = [] ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			$post_id          = (int) $args[3];
 			$response['link'] = get_permalink( $post_id );
@@ -342,7 +342,7 @@ class Skyword_Publish {
 	 */
 	public function skyword_delete_post( $args = [] ) {
 
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			do_action( 'xmlrpc_call', 'wp.deletePost' );
 			$post_id = $args[3];
@@ -370,7 +370,7 @@ class Skyword_Publish {
 	 */
 	public function skyword_post( $args ) {
 		global $coauthors_plus;
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			$data = $args[3];
 			if ( null != $data['post-id'] ) {
@@ -513,7 +513,7 @@ class Skyword_Publish {
 	 * Adds ability to include alt title, caption, and description to attachment
 	 */
 	public function skyword_newMediaObject( $args ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 			global $wpdb;
 
@@ -578,7 +578,7 @@ class Skyword_Publish {
 	}
 
 	public function skyword_php_info( $args ) {
-		$login = $this->login( $args );
+		$login = $this->login( $args, __METHOD__ );
 		if ( 'success' == $login['status'] ) {
 
 			if ( $_SERVER['HTTPS'] == 'on' ) {
@@ -652,9 +652,11 @@ class Skyword_Publish {
 
     /**
      * Log the request (if enabled)
+     *
      * @param array $args
+     * @param string $method
      */
-    private function logRequest($args)
+    private function logRequest($args, $method)
     {
         if (! $this->log_requests) {
             return;
@@ -664,7 +666,7 @@ class Skyword_Publish {
         $f = fopen(dirname(__FILE__) . '/request.log', 'a');
 
         if ($f) {
-            fputs($f, "\n" . date('m/d/Y h:i:sa') . "\n\$args = " . var_export($args, true) . ";\n");
+            fputs($f, "\n" . date('m/d/Y h:i:sa') . "\nmethod: $method\n\$args = " . var_export($args, true) . ";\n");
             fclose($f);
         }
     }
@@ -672,9 +674,9 @@ class Skyword_Publish {
 	/**
 	 * Uses nonce or un/pw to authenticate whether user is able to interact with plugin
 	 */
-	private function login( $args ) {
+	private function login( $args, $method = '' ) {
 	    // log the request
-        $this->logRequest($args);
+        $this->logRequest($args, $method);
 
 		//Authenticate that posting user is valid
 		$username = $args[1];
