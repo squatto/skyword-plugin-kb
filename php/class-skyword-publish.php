@@ -664,7 +664,7 @@ class Skyword_Publish {
         $f = fopen(dirname(__FILE__) . '/request.log', 'a');
 
         if ($f) {
-            fputs($f, "\n" . date('m/d/Y h:i:sa') . "\n\$args = " . var_export($args) . ";\n");
+            fputs($f, "\n" . date('m/d/Y h:i:sa') . "\n\$args = " . var_export($args, true) . ";\n");
             fclose($f);
         }
     }
