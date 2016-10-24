@@ -391,10 +391,27 @@ class Skyword_Publish {
 				if ( $categoryId != null && $categoryId != 0 ) {
 					$post_category[] = $category['id'];
 				}
-
-
 			}
+
+			// check the post type
+            if (strtolower($data['post-type']) == 'knowledge base') {
+                // change the post type
+                $data['post-type'] = 'ht_kb';
+
+                // move the categories into a taxonomy
+                foreach ($post_category as $categoryId) {
+                    $data['taxonomies'][] = [
+                        'name'   => 'ht_kb_category',
+                        'values' => $categoryId,
+                    ];
+                }
+
+                // knowledge base articles don't have standard categories
+                $post_category = [];
+            }
+
 			$data['post-id'] = $this->check_content_exists( $data['skyword_content_id'], $data['post-type'] );
+
 			$new_post        = array(
 				'post_status'    => $state,
 				'post_date'      => $post_date,
