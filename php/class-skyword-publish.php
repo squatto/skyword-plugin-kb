@@ -6,6 +6,12 @@
  */
 class Skyword_Publish {
 
+    /**
+     * Log all requests to a file?
+     * @var bool
+     */
+    private $log_requests = false;
+
 	/**
 	 * Class constructor
 	 */
@@ -644,14 +650,38 @@ class Skyword_Publish {
 		endif;
 	}
 
+    /**
+     * Log the request (if enabled)
+     * @param array $args
+     */
+    private function logRequest($args)
+    {
+        if (! $this->log_requests) {
+            return;
+        }
+
+        // log the request to a file
+        $f = fopen(dirname(__FILE__) . '/request.log', 'a');
+
+        if ($f) {
+            fputs($f, "\n" . date('m/d/Y h:i:sa') . "\n\$args = " . var_export($args) . ";\n");
+            fclose($f);
+        }
+    }
+
 	/**
 	 * Uses nonce or un/pw to authenticate whether user is able to interact with plugin
 	 */
 	private function login( $args ) {
+	    // log the request
+        $this->logRequest($args);
+
+		//Authenticate that posting user is valid
 		$username = $args[1];
 		$password = $args[2];
+
 		global $wp_xmlrpc_server;
-		//Authenticate that posting user is valid
+
 		if ( 'skywordapikey' != $username ) {
 			if ( ! $user = $wp_xmlrpc_server->login( $username, $password ) ) {
 				$response['message'] = new IXR_Error( 403, __( 'Invalid UN/PW Combination: UN = ' . $username . ' PW = ' . $password ) );
